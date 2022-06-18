@@ -10,7 +10,14 @@ PROGRAMMING_LANGUAGES = ('Python', 'Java', 'Perl', 'JavaScript', 'C++', 'C#', 'G
 
 
 def predict_rub_salary(vacancy):
-    pass
+    if vacancy['from'] and vacancy['to']:
+        return (vacancy['from'] + vacancy['to']) / 2
+    elif vacancy['from'] and vacancy['to'] is None:
+        return vacancy['from'] * 1.2
+    elif vacancy['from'] is None and vacancy['to']:
+        return vacancy['to'] * 0.8
+    else:
+        return None
 
 
 def get_headhunter_vacancies():
@@ -27,8 +34,24 @@ def get_headhunter_vacancies():
     return vacancies
 
 
+def get_python_salary():
+    payload = {'professional_role': PROGRAMMING_CATEGORY_ID,
+               'period': SEARCH_PERIOD,
+               'area': AREA_ID,
+               'text': 'python'
+               }
+    response = requests.get(HH_BASE_URL, params=payload)
+    response.raise_for_status()
+    for vacancy in response.json()['items']:
+        try:
+            print(predict_rub_salary(vacancy['salary']), vacancy['salary'])
+        except TypeError as e:
+            print(None)
+
+
 def main():
-    pprint(get_headhunter_vacancies())
+    # pprint(get_headhunter_vacancies())
+    get_python_salary()
 
 
 if __name__ == '__main__':
