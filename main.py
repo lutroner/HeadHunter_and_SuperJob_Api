@@ -1,6 +1,5 @@
 import requests
-from pprint import pprint
-import environs
+
 
 HH_BASE_URL = 'https://api.hh.ru/vacancies'
 PROGRAMMING_CATEGORY_ID = 96
